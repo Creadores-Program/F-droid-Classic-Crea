@@ -45,6 +45,8 @@ import org.fdroid.fdroid.net.ImageLoaderForUIL;
 import org.ligi.tracedroid.TraceDroid;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import info.guardianproject.netcipher.NetCipher;
 import info.guardianproject.netcipher.proxy.OrbotHelper;
@@ -68,6 +70,8 @@ public class FDroidApp extends Application {
     }
 
     private static FDroidApp instance;
+
+    private ExecutorService databaseExecutor;
 
     public void applyDialogTheme(Activity activity) {
         activity.setTheme(getCurDialogThemeResId());
@@ -183,6 +187,8 @@ public class FDroidApp extends Application {
                     .build());
         }
 
+        databaseExecutor = Executors.newSingleThreadExecutor();
+
         Preferences.setup(this);
         curTheme = Preferences.get().getTheme();
         Preferences.get().configureProxy();
@@ -219,6 +225,7 @@ public class FDroidApp extends Application {
                 diskCache = new UnlimitedDiskCache(Utils.getImageCacheDir(this));
             }
         }
+
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())
                 .imageDownloader(new ImageLoaderForUIL(getApplicationContext()))
                 .defaultDisplayImageOptions(Utils.getDefaultDisplayImageOptionsBuilder().build())
@@ -243,6 +250,10 @@ public class FDroidApp extends Application {
             return (int) Math.max(1, Math.min(16, memInfo.totalMem / 256 / 1024 / 1024));
         }
         return 2;
+    }
+
+    public static ExecutorService getDatabaseExecutor() {
+        return instance.databaseExecutor;
     }
 
     private static final LongSparseArray<String> lastWorkingMirrorArray = new LongSparseArray<>(1);
