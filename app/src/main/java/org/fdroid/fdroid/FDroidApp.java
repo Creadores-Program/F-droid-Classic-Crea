@@ -46,7 +46,9 @@ import org.fdroid.fdroid.data.Repo;
 import org.fdroid.fdroid.data.RepoProvider;
 import org.fdroid.fdroid.net.ImageLoaderForUIL;
 import org.ligi.tracedroid.TraceDroid;
+import org.conscrypt.Conscrypt;
 
+import java.security.Security;
 import java.io.IOException;
 import java.util.Locale;
 
@@ -187,6 +189,7 @@ public class FDroidApp extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         instance = this;
+        Security.insertProviderAt(Conscrypt.newProvider(), 1);
         TraceDroid.init(this);
         if (BuildConfig.DEBUG) {
             StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
