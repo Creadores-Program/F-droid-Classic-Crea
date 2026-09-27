@@ -25,6 +25,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.StrictMode;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -189,7 +190,9 @@ public class FDroidApp extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         instance = this;
-        Security.insertProviderAt(Conscrypt.newProvider(), 1);
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+            Security.insertProviderAt(Conscrypt.newProvider(), 1);
+        }
         TraceDroid.init(this);
         if (BuildConfig.DEBUG) {
             StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
