@@ -27,10 +27,8 @@ jobs:
 
       - name: Perms Gradle
         run: chmod 777 gradlew
-      - name: Update Gradle
-        run: ./gradlew wrapper --gradle-version 8.4
-      #- name: Set Key
-       # run: echo "${{ secrets.CREATVKEYAPPB }}" | base64 -d > app/CreaTv.keystore
+      - name: Set Key
+        run: echo "${{ secrets.CREATVKEYAPPB }}" | base64 -d > app/CreaTv.keystore
       - name: Build App
         #env:
           #CREATVKEYCONTREAPP: ${{ secrets.CREATVKEYCONTREAPP }}
