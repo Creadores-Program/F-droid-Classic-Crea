@@ -21,11 +21,11 @@ dependencies {
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     compile 'com.google.zxing:core:3.2.1'
     compile 'com.github.Chainfire:libsuperuser:1.1.0.201907261845'
-    compile 'com.github.mvdan:accesspoint:v0.2.0'
+    compile 'com.github.mvdan.accesspoint:library:v0.2.0'
     compile 'info.guardianproject.netcipher:netcipher:1.2.1'
     compile 'commons-io:commons-io:2.4'
     compile 'commons-net:commons-net:3.4'
-    compile 'com.github.openhab:jmdns:3.4.2'
+    compile 'javax.jmdns:jmdns:3.4.1'
     compile('ch.acra:acra:4.8.5') {
         exclude module: 'support-v4'
         exclude module: 'support-annotations'
