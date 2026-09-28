@@ -60,7 +60,7 @@ jobs:
           path: ${{ (github.event_name == 'release' || inputs.simulate_release) && 'app/build/outputs/apk/release/*.apk' || 'app/build/outputs/apk/debug/*.apk' }}
 
   build-legacy:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
         with:
