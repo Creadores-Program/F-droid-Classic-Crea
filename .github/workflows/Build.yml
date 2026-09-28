@@ -7,14 +7,22 @@ on:
   pull_request:
     paths-ignore:
       - 'README.md'
-jobs:
-  build:
-    runs-on: ubuntu-latest
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      simulate_release:
+        description: '¿Simulate a release event?'
+        type: boolean
+        default: false
 
+jobs:
+  build-modern:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
         with:
-          submodules: true  
+          submodules: true
 
       - name: Set up JDK 17
         uses: actions/setup-java@v5
@@ -27,32 +35,102 @@ jobs:
 
       - name: Perms Gradle
         run: chmod 777 gradlew
-      - name: Set Key
-        run: echo "${{ secrets.CREATVKEYAPPB }}" | base64 -d > app/CreaTv.keystore
-      - name: Build App
-        #env:
-          #CREATVKEYCONTREAPP: ${{ secrets.CREATVKEYCONTREAPP }}
-        run: ./gradlew :app:assembleDebug --no-daemon
-#      - name: Enable KVM group perms
-#        run: |
-#          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
-#          sudo udevadm control --reload-rules
-#          sudo udevadm trigger --name-match=kvm
-#      - name: Test App
-#        uses: ReactiveCircus/android-emulator-runner@v2.38.0
-#        with:
-#          api-level: 16
-#          target: default
-#          arch: x86
-#          profile: Nexus 4
-#          script: |
-#            adb wait-for-device
-#            adb install "app/build/outputs/apk/debug/app-debug.apk"
-#            chmod +x ./tests/test-app.sh
-#            ./tests/test-app.sh
 
-      - name: Upload APK artifact
+      - name: Set Key
+        run: echo "${{ secrets.CREAFDKEYAPPB }}" | base64 -d > app/CreaFD.keystore
+
+      - name: Build App (Modern)
+        run: |
+          if [ "${{ github.event_name }}" = "release" ] || [ "${{ inputs.simulate_release }}" = "true" ]; then
+            ./gradlew :app:assembleRelease --no-daemon
+          else
+            ./gradlew :app:assembleDebug --no-daemon
+          fi
+
+      - name: Rename Modern Release APK
+        if: github.event_name == 'release' || inputs.simulate_release
+        run: |
+          cd app/build/outputs/apk/release/
+          for f in *.apk; do mv "$f" "${f%.apk}-modern.apk"; done
+
+      - name: Upload APK artifact (Modern)
         uses: actions/upload-artifact@v7
         with:
-          name: F-Droid-CCApp
-          path: app/build/outputs/apk/debug/*.apk
+          name: ${{ (github.event_name == 'release' || inputs.simulate_release) && 'CreaFDroidApp-Modern-Release' || 'CreaFDroidApp-Modern-Debug' }}
+          path: ${{ (github.event_name == 'release' || inputs.simulate_release) && 'app/build/outputs/apk/release/*.apk' || 'app/build/outputs/apk/debug/*.apk' }}
+
+  build-legacy:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: sdk9
+          submodules: true
+
+      - name: Set up JDK 8
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: 8
+
+
+      - name: Perms Gradle
+        run: chmod 777 gradlew
+
+      - name: Set Key
+        run: echo "${{ secrets.CREAFDKEYAPPB }}" | base64 -d > app/CreaFD.keystore
+
+      - name: Build App (Legacy)
+        run: |
+          if [ "${{ github.event_name }}" = "release" ] || [ "${{ inputs.simulate_release }}" = "true" ]; then
+            ./gradlew :app:assembleRelease --no-daemon
+          else
+            ./gradlew :app:assembleDebug --no-daemon
+          fi
+
+      - name: Rename Legacy Release APK
+        if: github.event_name == 'release' || inputs.simulate_release
+        run: |
+          cd app/build/outputs/apk/release/
+          for f in *.apk; do mv "$f" "${f%.apk}-legacy.apk"; done
+
+      - name: Upload APK artifact (Legacy)
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ (github.event_name == 'release' || inputs.simulate_release) && 'CreaFDroidApp-Legacy-Release' || 'CreaFDroidApp-Legacy-Debug' }}
+          path: ${{ (github.event_name == 'release' || inputs.simulate_release) && 'app/build/outputs/apk/release/*.apk' || 'app/build/outputs/apk/debug/*.apk' }}
+
+  publish-release:
+    if: github.event_name == 'release' || inputs.simulate_release
+    needs: [build-modern, build-legacy]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download Modern Release APK
+        uses: actions/download-artifact@v4
+        with:
+          name: CreaFDroidApp-Modern-Release
+          path: release-apks/modern
+
+      - name: Download Legacy Release APK
+        uses: actions/download-artifact@v4
+        with:
+          name: CreaFDroidApp-Legacy-Release
+          path: release-apks/legacy
+
+      - name: Attach Both APKs to GitHub Release
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v3
+        with:
+          files: |
+            release-apks/modern/*.apk
+            release-apks/legacy/*.apk
+
+      - name: Sync FDroid Repo
+        if: github.event_name == 'release'
+        uses: peter-evans/repository-dispatch@v4
+        with:
+          token: ${{ secrets.FDROID_SYNC }}
+          repository: Creadores-Program/CreaProFDR
+          event-type: app_updated
