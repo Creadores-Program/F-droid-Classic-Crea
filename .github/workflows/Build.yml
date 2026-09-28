@@ -67,7 +67,13 @@ jobs:
           ref: sdk9
           submodules: true
 
-      - name: Set up JDK 8
+      - name: Set up JDK 17
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: 17
+      - name: Set up JDK 8 (For Legacy Gradle)
+        id: setup-jdk8
         uses: actions/setup-java@v5
         with:
           distribution: 'temurin'
@@ -83,6 +89,8 @@ jobs:
       - name: Set Key
         run: echo "${{ secrets.CREAFDKEYAPPB }}" | base64 -d > app/CreaFD.keystore
       - name: Build App (Legacy)
+        env:
+          JAVA_HOME: ${{ steps.setup-jdk8.outputs.path }}
         run: |
           if [ "${{ github.event_name }}" = "release" ] || [ "${{ inputs.simulate_release }}" = "true" ]; then
             ./gradlew :app:assembleRelease --no-daemon
