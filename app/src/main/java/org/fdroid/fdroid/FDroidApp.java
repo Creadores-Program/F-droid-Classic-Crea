@@ -56,7 +56,9 @@ import org.fdroid.fdroid.data.InstalledAppCacheUpdater;
 import org.fdroid.fdroid.data.Repo;
 import org.fdroid.fdroid.net.IconDownloader;
 import org.fdroid.fdroid.net.WifiStateChangeService;
+import org.conscrypt.Conscrypt;
 
+import java.security.Security;
 import java.io.File;
 import java.net.URL;
 import java.net.URLStreamHandler;
@@ -172,6 +174,7 @@ public class FDroidApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+      Security.insertProviderAt(Conscrypt.newProvider(), 1);
         if (Build.VERSION.SDK_INT >= 9 && BuildConfig.DEBUG) {
             StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
                     .detectAll()
