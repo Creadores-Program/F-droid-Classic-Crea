@@ -28,6 +28,7 @@ dependencies {
     }
     compile 'io.reactivex:rxjava:1.1.0'
     compile 'io.reactivex:rxandroid:0.23.0'
+    compile 'org.conscrypt:conscrypt-android:2.5.3'
 
     testCompile 'junit:junit:4.12'
 
@@ -87,6 +88,7 @@ if (!hasProperty('sourceDeps')) {
             'ch.acra:acra:afd5b28934d5166b55f261c85685ad59e8a4ebe9ca1960906afaa8c76d8dc9eb',
             'io.reactivex:rxjava:2c162afd78eba217cdfee78b60e85d3bfb667db61e12bc95e3cf2ddc5beeadf6',
             'io.reactivex:rxandroid:35c1a90f8c1f499db3c1f3d608e1f191ac8afddb10c02dd91ef04c03a0a4bcda',
+            'org.conscrypt:conscrypt-android:0000000000000000000000000000000000000000000000000000000000000000'
         ]
     }
 
