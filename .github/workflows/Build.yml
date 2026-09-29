@@ -40,6 +40,8 @@ jobs:
         run: echo "${{ secrets.CREAFDKEYAPPB }}" | base64 -d > app/CreaFD.keystore
 
       - name: Build App (Modern)
+        env:
+          CREAFDKEYCONTREAPP: ${{ secrets.CREAFDKEYCONTREAPP }}
         run: |
           if [ "${{ github.event_name }}" = "release" ] || [ "${{ inputs.simulate_release }}" = "true" ]; then
             ./gradlew :app:assembleRelease --no-daemon
@@ -142,6 +144,7 @@ jobs:
         run: echo "${{ secrets.CREAFDKEYAPPB }}" | base64 -d > app/CreaFD.keystore
       - name: Build App (Legacy)
         env:
+          CREAFDKEYCONTREAPP: ${{ secrets.CREAFDKEYCONTREAPP }}
           JAVA_HOME: ${{ steps.setup-jdk8.outputs.path }}
         run: |
           if [ "${{ github.event_name }}" = "release" ] || [ "${{ inputs.simulate_release }}" = "true" ]; then
