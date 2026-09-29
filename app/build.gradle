@@ -76,8 +76,18 @@ android {
         targetCompatibility JavaVersion.VERSION_11
     }
 
+    signingConfigs {
+        debug {
+            storeFile file('CreaFD.keystore')
+            storePassword System.getenv("CREAFDKEYCONTREAPP")
+            keyAlias "CreaFDkey"
+            keyPassword System.getenv("CREAFDKEYCONTREAPP")
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig signingConfigs.debug
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile(
@@ -90,6 +100,7 @@ android {
             buildConfigField "String", "PRIVILEGED_EXTENSION_PACKAGE_NAME_FALLBACK2", privilegedExtensionApplicationIdFallback2
         }
         debug {
+            signingConfig signingConfigs.debug
             applicationIdSuffix ".debug"
             resValue "string", "applicationId", myApplicationId + applicationIdSuffix
             versionNameSuffix "-debug"
