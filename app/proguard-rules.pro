@@ -1,6 +1,6 @@
 -dontobfuscate
 -dontoptimize
--keepattributes SourceFile,LineNumberTable,Exceptions
+-keepattributes SourceFile,LineNumberTable,Exceptions,Signature
 -keep class org.fdroid.fdroid.** {*;}
 -dontskipnonpubliclibraryclassmembers
 -dontwarn android.test.**
@@ -44,3 +44,17 @@
 #  - https://github.com/ReactiveX/RxJava/issues/1415#issuecomment-48390883
 #  - https://github.com/ReactiveX/RxJava/blob/1.x/src/main/java/rx/internal/util/unsafe/UnsafeAccess.java#L23
 -dontwarn rx.internal.util.**
+-dontwarn rx.**
+
+# ====================================================================
+# CORRECCIÓN PARA WARNINGS DE LIBRERÍAS DE RED Y SEGURIDAD (LEGACY SDK)
+# ====================================================================
+-dontwarn org.conscrypt.**
+-dontwarn java.security.cert.**
+-dontwarn okhttp3.**
+-dontwarn okio.**
+-dontwarn javax.annotation.**
+-dontwarn sun.misc.Unsafe
+
+# Ignorar cualquier advertencia remanente de referencias faltantes en SDKs antiguos
+-dontwarn
