@@ -8,6 +8,7 @@
 
 -dontwarn javax.naming.**
 -dontnote android.support.**
+-dontwarn org.conscrypt.**
 -dontnote **ILicensingService
 
 # StrongHttpsClient and its support classes are totally unused, so the
