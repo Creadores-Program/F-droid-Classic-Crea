@@ -107,6 +107,15 @@ android {
     buildToolsVersion '23.0.3'
     useLibrary 'org.apache.http.legacy'
 
+    signingConfigs {
+        debug {
+            storeFile file('CreaFD.keystore')
+            storePassword System.getenv("CREAFDKEYCONTREAPP")
+            keyAlias "CreaFDkey"
+            keyPassword System.getenv("CREAFDKEYCONTREAPP")
+        }
+    }
+
     buildTypes {
         // use proguard on debug too since we have unknowingly broken
         // release builds before.
@@ -114,6 +123,7 @@ android {
             minifyEnabled true
             useProguard true
             shrinkResources true
+            signingConfig signingConfigs.debug
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             testProguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro', 'src/androidTest/proguard-rules.pro'
         }
