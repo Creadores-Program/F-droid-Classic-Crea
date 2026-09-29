@@ -149,18 +149,19 @@ jobs:
           else
             ./gradlew :app:assembleDebug --no-daemon
           fi
-
       - name: Rename Legacy Release APK
         if: github.event_name == 'release' || inputs.simulate_release
         run: |
-          cd app/build/outputs/apk/release/
-          for f in *.apk; do mv "$f" "${f%.apk}-legacy.apk"; done
-
+          find app/build/outputs/apk/ -name "*.apk" -exec sh -c '
+            for f; do
+              mv "$f" "${f%.apk}-legacy.apk"
+            done
+          ' sh {} +
       - name: Upload APK artifact (Legacy)
         uses: actions/upload-artifact@v7
         with:
           name: ${{ (github.event_name == 'release' || inputs.simulate_release) && 'CreaFDroidApp-Legacy-Release' || 'CreaFDroidApp-Legacy-Debug' }}
-          path: ${{ (github.event_name == 'release' || inputs.simulate_release) && 'app/build/outputs/apk/release/*.apk' || 'app/build/outputs/apk/debug/*.apk' }}
+          path: app/build/outputs/apk/**/*.apk
 
   publish-release:
     if: github.event_name == 'release' || inputs.simulate_release
