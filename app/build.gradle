@@ -9,6 +9,7 @@ repositories {
     jcenter()
     maven { url 'https://jitpack.io' }
     maven { url 'https://jcenter.bintray.com' }
+    maven { url 'https://repo.spring.io/libs-milestone/' }
 }
 
 dependencies {
@@ -21,7 +22,7 @@ dependencies {
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     compile 'com.google.zxing:core:3.2.1'
     compile 'com.github.Chainfire:libsuperuser:1.1.0.201907261845'
-    compile 'com.github.mvdan.accesspoint:library:v0.2.0'
+    compile 'cc.mvdan.accesspoint:library:0.2.0'
     compile 'info.guardianproject.netcipher:netcipher:1.2.1'
     compile 'commons-io:commons-io:2.4'
     compile 'commons-net:commons-net:3.4'
