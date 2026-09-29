@@ -101,8 +101,41 @@ jobs:
       - name: Fix missing proguard-android.txt
         run: |
           mkdir -p $ANDROID_HOME/tools/proguard
-          # Descarga el proguard-android.txt estándar directamente al directorio SDK esperado
-          curl -sSL "https://raw.githubusercontent.com/google/bundletool/master/src/main/resources/proguard/proguard-android.txt" -o $ANDROID_HOME/tools/proguard/proguard-android.txt
+          cat << 'EOF' > $ANDROID_HOME/tools/proguard/proguard-android.txt
+          # Standard Android ProGuard rules
+          -dontusemixedcaseclassnames
+          -dontskipnonpubliclibraryclasses
+          -verbose
+          -dontoptimize
+          -dontpreverify
+
+          -keepattributes *Annotation*
+          -keep public class com.google.vending.licensing.ILicensingService
+          -keep public class com.android.vending.licensing.ILicensingService
+
+          -keepclasseswithmembernames class * {
+              native <methods>;
+          }
+
+          -keepclassmembers class * extends android.app.Activity {
+             public void *(android.view.View);
+          }
+
+          -keepclassmembers enum * {
+              public static **[] values();
+              public static ** valueOf(java.lang.String);
+          }
+
+          -keep class * implements android.os.Parcelable {
+            public static final android.os.Parcelable$Creator *;
+          }
+
+          -keepclassmembers class **.R$* {
+              public static <fields>;
+          }
+
+          -dontwarn android.support.**
+          EOF
       - name: Perms Gradle
         run: chmod 777 gradlew
       - name: Set Key
