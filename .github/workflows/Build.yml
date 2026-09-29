@@ -98,6 +98,11 @@ jobs:
         run: |
           yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
           $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "build-tools;23.0.3" "platforms;android-23"
+      - name: Fix missing proguard-android.txt
+        run: |
+          mkdir -p $ANDROID_HOME/tools/proguard
+          # Descarga el proguard-android.txt estándar directamente al directorio SDK esperado
+          curl -sSL "https://raw.githubusercontent.com/google/bundletool/master/src/main/resources/proguard/proguard-android.txt" -o $ANDROID_HOME/tools/proguard/proguard-android.txt
       - name: Perms Gradle
         run: chmod 777 gradlew
       - name: Set Key
