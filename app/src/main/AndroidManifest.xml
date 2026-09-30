@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.fdroid.fdroid"
+    package="eu.bubu1.fdroidclassic"
     android:installLocation="auto"
     android:versionCode="4439"
     android:versionName="0.100-alpha7"
@@ -58,7 +58,7 @@
     <uses-permission android:name="android.permission.ACCESS_SUPERUSER"/>
 
     <application
-        android:name=".FDroidApp"
+        android:name="org.fdroid.fdroid.FDroidApp"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:description="@string/app_description"
@@ -100,10 +100,10 @@
 
         <meta-data
             android:name="android.app.default_searchable"
-            android:value=".FDroid" />
+            android:value="org.fdroid.fdroid.FDroid" />
 
         <activity
-            android:name=".FDroid"
+            android:name="org.fdroid.fdroid.FDroid"
             android:launchMode="singleTop"
             android:windowSoftInputMode="adjustResize"
             android:configChanges="layoutDirection|locale|keyboardHidden|orientation|screenSize" >
@@ -319,21 +319,21 @@
         <activity
             android:name=".privileged.views.InstallConfirmActivity"
             android:label="@string/menu_install"
-            android:parentActivityName=".FDroid"
+            android:parentActivityName="org.fdroid.fdroid.FDroid"
             android:configChanges="layoutDirection|locale" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".FDroid" />
+                android:value="org.fdroid.fdroid.FDroid" />
         </activity>
         <activity
-            android:name=".views.ManageReposActivity"
+            android:name="org.fdroid.fdroid.views.ManageReposActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask"
-            android:parentActivityName=".FDroid"
+            android:parentActivityName="org.fdroid.fdroid.FDroid"
             android:configChanges="layoutDirection|locale" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".FDroid" />
+                android:value="org.fdroid.fdroid.FDroid" />
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -343,38 +343,38 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".NfcNotEnabledActivity"
+            android:name="org.fdroid.fdroid.NfcNotEnabledActivity"
             android:noHistory="true"
             android:configChanges="layoutDirection|locale" />
         <activity
-            android:name=".views.RepoDetailsActivity"
+            android:name="org.fdroid.fdroid.views.RepoDetailsActivity"
             android:label="@string/repo_details"
-            android:parentActivityName=".views.ManageReposActivity"
+            android:parentActivityName="org.fdroid.fdroid.views.ManageReposActivity"
             android:windowSoftInputMode="stateHidden"
             android:configChanges="layoutDirection|locale" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".views.ManageReposActivity" />
+                android:value="org.fdroid.fdroid.views.ManageReposActivity" />
         </activity>
 
         <activity
-            android:name=".AppDetails"
+            android:name="org.fdroid.fdroid.AppDetails"
             android:label="@string/app_details"
             android:exported="true"
-            android:parentActivityName=".FDroid"
+            android:parentActivityName="org.fdroid.fdroid.FDroid"
             android:configChanges="layoutDirection|locale" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".FDroid" />
+                android:value="org.fdroid.fdroid.FDroid" />
 
         </activity>
         <activity
             android:label="@string/menu_settings"
-            android:name=".PreferencesActivity"
-            android:parentActivityName=".FDroid" >
+            android:name="org.fdroid.fdroid.PreferencesActivity"
+            android:parentActivityName="org.fdroid.fdroid.FDroid" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".FDroid" />
+                android:value="org.fdroid.fdroid.FDroid" />
         </activity>
         <activity
             android:name="org.fdroid.fdroid.CrashReportActivity"
@@ -392,64 +392,64 @@
             android:configChanges="orientation|keyboardHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".FDroid" />
+                android:value="org.fdroid.fdroid.FDroid" />
         </activity>
         <!-- Note: AppThemeTransparent, this activity shows dialogs only -->
         <activity
-            android:name=".privileged.install.InstallExtensionDialogActivity"
+            android:name="org.fdroid.fdroid.privileged.install.InstallExtensionDialogActivity"
             android:theme="@style/AppThemeTransparent" />
         <receiver
-            android:name=".privileged.install.InstallExtensionBootReceiver" >
+            android:name="org.fdroid.fdroid.privileged.install.InstallExtensionBootReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".receiver.StartupReceiver" >
+        <receiver android:name="org.fdroid.fdroid.receiver.StartupReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
 
                 <category android:name="android.intent.category.HOME" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".receiver.PackageAddedReceiver" >
+        <receiver android:name="org.fdroid.fdroid.receiver.PackageAddedReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_ADDED" />
 
                 <data android:scheme="package" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".receiver.PackageUpgradedReceiver" >
+        <receiver android:name="org.fdroid.fdroid.receiver.PackageUpgradedReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_REPLACED" />
 
                 <data android:scheme="package" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".receiver.PackageRemovedReceiver" >
+        <receiver android:name="org.fdroid.fdroid.receiver.PackageRemovedReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_REMOVED" />
 
                 <data android:scheme="package" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".receiver.WifiStateChangeReceiver" >
+        <receiver android:name="org.fdroid.fdroid.receiver.WifiStateChangeReceiver" >
             <intent-filter>
                 <action android:name="android.net.wifi.STATE_CHANGE" />
             </intent-filter>
         </receiver>
 
-        <service android:name=".UpdateService" />
+        <service android:name="org.fdroid.fdroid.UpdateService" />
         <service
-            android:name=".net.DownloaderService"
+            android:name="org.fdroid.fdroid.net.DownloaderService"
             android:exported="false" />
         <service
-            android:name=".CleanCacheService"
+            android:name="org.fdroid.fdroid.CleanCacheService"
             android:exported="false" />
-        <service android:name=".net.WifiStateChangeService" />
-        <service android:name=".localrepo.SwapService" />
+        <service android:name="org.fdroid.fdroid.net.WifiStateChangeService" />
+        <service android:name="org.fdroid.fdroid.localrepo.SwapService" />
         <service
-            android:name=".installer.InstallManagerService"
+            android:name="org.fdroid.fdroid.installer.InstallManagerService"
             android:exported="false" />
     </application>
 
