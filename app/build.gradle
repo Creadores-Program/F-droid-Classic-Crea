@@ -138,7 +138,6 @@ android {
     }
 
     defaultConfig {
-        applicationId "org.fdroid.fdroid"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -238,5 +237,10 @@ android.applicationVariants.all { variant ->
         options.links("http://d.android.com/reference/");
         exclude '**/BuildConfig.java'
         exclude '**/R.java'
+    }
+}
+android.applicationVariants.all { variant ->
+    variant.outputs.each { output ->
+        output.processResources.aaptOptions.additionalParameters '--custom-package', 'org.fdroid.fdroid'
     }
 }
